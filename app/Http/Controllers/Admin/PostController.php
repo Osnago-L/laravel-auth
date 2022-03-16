@@ -47,6 +47,12 @@ class PostController extends Controller
         $data = $request->all();
 
         $tempSlug = Str::slug($data['posts_title'],'-');
+        $cont = 1;
+        while (Post::where('slug', $tempSlug)->first()){
+            $tempSlug = Str::slug($data['posts_title'],'-')."-".$cont;
+            $cont++;
+        }
+
         $data['slug'] = $tempSlug;
 
         $newPost = new Post();
@@ -97,6 +103,11 @@ class PostController extends Controller
         $data = $request->all();
 
         $tempSlug = Str::slug($data['posts_title'],'-');
+        $cont = 1;
+        while (Post::where('slug', $tempSlug)->where('id','!=', $post->id)->first()){
+            $tempSlug = Str::slug($data['posts_title'],'-')."-".$cont;
+            $cont++;
+        }
         $data['slug'] = $tempSlug;
 
         $post->fill($data);
